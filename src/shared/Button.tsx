@@ -1,8 +1,7 @@
 import { defineComponent, PropType } from 'vue';
 import s from './Button.module.scss';
 
-interface Props{
-
+interface Props {
 }
 
 export const Button = defineComponent({
@@ -11,7 +10,7 @@ export const Button = defineComponent({
       type: Function as PropType<(e: MouseEvent) => void>
     },
     level: {
-      type: String as PropType<'important' | 'normal' |'danger'>,
+      type: String as PropType<'important' | 'normal' | 'danger'>,
       default: 'important'
     },
     type: {
