@@ -4,6 +4,7 @@ import { EmojiSelect } from './EmojiSelect';
 import s from './Form.module.scss';
 import { Time } from './time';
 import { Button } from './Button';
+import { getFriendlyError } from './getFriendlyError';
 export const Form = defineComponent({
   props: {
     onSubmit: {
@@ -111,7 +112,7 @@ export const FormItem = defineComponent({
             {content.value}
           </div>
           <div class={s.formItem_errorHint}>
-            <span>{props.error ?? '　'}</span>
+            <span>{props.error ? getFriendlyError(props.error) : '　'}</span>
           </div>
         </label>
       </div>
