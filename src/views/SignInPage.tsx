@@ -5,9 +5,9 @@ import { hasError, validate } from "../shared/validate";
 import { Form, FormItem } from "../shared/Form";
 import { Button } from "../shared/Button";
 import s from './SignInPage.module.scss';
-import axios from "axios";
 import { http } from "../shared/Http";
 import { useBool } from "../hooks/useBool";
+import { history } from "../shared/history";
 export const SignInPage = defineComponent({
   setup: (props, context) => {
     const formData = reactive({
@@ -21,7 +21,6 @@ export const SignInPage = defineComponent({
     const refValidationCode = ref<any>()
     const { ref: refDisabled, toggle, on: disabled, off: enable } = useBool(false)
     const onSubmit = async (e: Event) => {
-      console.log('submit')
       e.preventDefault()
       Object.assign(errors, {
         email: [], code: []
@@ -32,7 +31,9 @@ export const SignInPage = defineComponent({
         { key: 'code', type: 'required', message: '必填' },
       ]))
       if(!hasError(errors)){
-        const response = await http.post('/session', formData)
+        const response = await http.post<{ jwt: string }>('/session', formData)
+        localStorage.setItem('jwt', response.data.jwt)
+        history.push('/')
       }
     }
     const onError = (error: any) => {
