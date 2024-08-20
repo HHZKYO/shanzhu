@@ -47,6 +47,7 @@ export const Overlay = defineComponent({
   }
 })
 
+
 export const OverlayIcon = defineComponent({
   setup: (props, context) => {
     const refOverlayVisible = ref(false)
@@ -59,5 +60,6 @@ export const OverlayIcon = defineComponent({
         <Overlay onClose={() => refOverlayVisible.value = false} />
       }
     </>
+
   }
 })

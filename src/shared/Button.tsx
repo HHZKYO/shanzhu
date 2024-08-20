@@ -19,7 +19,7 @@ export const Button = defineComponent({
     },
     disabled: {
       type: Boolean,
-      dafault: false
+      default: false
     },
     autoSelfDisabled: {
       type: Boolean,
@@ -41,7 +41,7 @@ export const Button = defineComponent({
     const onClick = () => {
       props.onClick?.()
       selfDisabled.value = true
-      setTimeout(() => {
+      setTimeout(()=>{
         selfDisabled.value = false
       },500)
     }

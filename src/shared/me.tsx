@@ -1,10 +1,10 @@
 import { AxiosResponse } from "axios";
-import { http } from "./Http";
+import { http } from "./Http"
 
 export let mePromise: Promise<AxiosResponse<{
   resource: {
     id: number;
-  }
+  };
 }>> | undefined
 
 export const refreshMe = () => {

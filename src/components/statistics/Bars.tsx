@@ -1,4 +1,4 @@
-import { computed, defineComponent, PropType, reactive } from "vue";
+import { computed, defineComponent, PropType, reactive } from 'vue';
 import s from './Bars.module.scss';
 export const Bars = defineComponent({
   props: {

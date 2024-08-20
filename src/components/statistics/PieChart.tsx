@@ -1,4 +1,4 @@
-import { defineComponent, onMounted, PropType, ref } from "vue";
+import { defineComponent, onMounted, PropType, ref } from 'vue';
 import s from './PieChart.module.scss';
 import * as echarts from 'echarts';
 export const PieChart = defineComponent({
@@ -42,8 +42,8 @@ export const PieChart = defineComponent({
       };
       myChart.setOption(option);
     })
-    return () => {
+    return () => (
       <div ref={refDiv2} class={s.wrapper}></div>
-    }
+    )
   }
 })

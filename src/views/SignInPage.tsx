@@ -1,18 +1,20 @@
-import { defineComponent, reactive, ref } from "vue";
-import { MainLayout } from "../layouts/MainLayout";
-import { Icon } from "../shared/Icon";
-import { hasError, validate } from "../shared/validate";
-import { Form, FormItem } from "../shared/Form";
-import { Button } from "../shared/Button";
+import axios, { AxiosResponse } from 'axios';
+import { defineComponent, PropType, reactive, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useBool } from '../hooks/useBool';
+import { MainLayout } from '../layouts/MainLayout';
+import { Button } from '../shared/Button';
+import { Form, FormItem } from '../shared/Form';
+import { history } from '../shared/history';
+import { http } from '../shared/Http';
+import { Icon } from '../shared/Icon';
+import { refreshMe } from '../shared/me';
+import { hasError, validate } from '../shared/validate';
 import s from './SignInPage.module.scss';
-import { http } from "../shared/Http";
-import { useBool } from "../hooks/useBool";
-import { useRoute, useRouter } from "vue-router";
-import { refreshMe } from "../shared/me";
 export const SignInPage = defineComponent({
   setup: (props, context) => {
     const formData = reactive({
-      email: '1692189552@qq.com',
+      email: '',
       code: ''
     })
     const errors = reactive({
@@ -33,9 +35,13 @@ export const SignInPage = defineComponent({
         { key: 'email', type: 'pattern', regex: /.+@.+/, message: '必须是邮箱地址' },
         { key: 'code', type: 'required', message: '必填' },
       ]))
-      if(!hasError(errors)){
-        const response = await http.post<{ jwt: string }>('/session', formData)
+      if (!hasError(errors)) {
+        const response = await http.post<{ jwt: string }>('/session', formData, {
+          params: { _mock: 'session' }
+        }).catch(onError)
+        console.log(response)
         localStorage.setItem('jwt', response.data.jwt)
+        // router.push('/sign_in?return_to='+ encodeURIComponent(route.fullPath))
         const returnTo = route.query.return_to?.toString()
         refreshMe()
         router.push(returnTo || '/')
@@ -48,13 +54,15 @@ export const SignInPage = defineComponent({
       throw error
     }
     const onClickSendValidationCode = async () => {
+
       disabled()
       const response = await http
-        .post('validation_codes', { email: formData.email })
+        .post('/validation_codes', { email: formData.email })
         .catch(onError)
         .finally(enable)
-      //成功
+      // 成功
       refValidationCode.value.startCount()
+
     }
     return () => (
       <MainLayout>{
@@ -72,8 +80,8 @@ export const SignInPage = defineComponent({
                   placeholder='请输入邮箱，然后点击发送验证码'
                   v-model={formData.email} error={errors.email?.[0]} />
                 <FormItem ref={refValidationCode} label="验证码" type="validationCode"
-                  placeholder="请输入六位数字"
-                  countForm = {1}
+                  placeholder='请输入六位数字'
+                  countFrom={1}
                   disabled={refDisabled.value}
                   onClick={onClickSendValidationCode}
                   v-model={formData.code} error={errors.code?.[0]} />

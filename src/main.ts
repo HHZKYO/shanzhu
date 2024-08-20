@@ -27,7 +27,7 @@ router.beforeEach((to, from) => {
       return true
     }
   }
-  return mePromise!.then (
+  return mePromise!.then(
     () => true,
     () => '/sign_in?return_to=' + to.path
   )
