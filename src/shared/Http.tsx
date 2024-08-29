@@ -86,7 +86,7 @@ const mock = (response: AxiosResponse) => {
       ;[response.status, response.data] = mockTagShow(response.config)
       return false
     case 'tagEdit':
-      [response.status, response.data] = mockTagEdit(response.config)
+      ;[response.status, response.data] = mockTagEdit(response.config)
       return true
   }
   return false
