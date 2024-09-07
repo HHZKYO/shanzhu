@@ -6,6 +6,8 @@ import { PieChart } from "./PieChart"
 import { Bars } from "./Bars"
 import { http } from "../../shared/Http"
 import { Time } from "../../shared/time"
+import { Tag } from "vant"
+import { number } from "echarts"
 
 const DAY = 24 * 3600 * 1000
 
@@ -51,7 +53,6 @@ export const Charts = defineComponent({
         _mock: "itemSummary"
       })
       data1.value = response.data.groups
-      console.log(data1.value)
     })
 
     const data2 = ref<Data2>([])
@@ -62,6 +63,13 @@ export const Charts = defineComponent({
       }))
     )
 
+    const betterData3 = computed<{ tag: Tag, amount: number, percent: number }[]>(()=>{
+      const total = data2.value.reduce((sum, item) => sum + item.amount, 0)
+      return data2.value.map(item => ({
+        ...item,
+        percent: Math.round(item.amount / total * 100)
+      }))
+    })
     onMounted(async () => {
       const response = await http.get<{ groups: Data2; summary: number }>('/items/summary', {
         happen_after: props.startDate,
@@ -85,7 +93,7 @@ export const Charts = defineComponent({
         />
         <LineChart data={betterData1.value} />
         <PieChart data={betterData2.value} />
-        <Bars />
+        <Bars data={betterData3.value} />
       </div>
     )
   }
